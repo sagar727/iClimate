@@ -17,5 +17,5 @@ dependencyResolutionManagement {
 
 
 
-rootProject.name = "IClimate"
+rootProject.name = "iClimate"
 include(":app")
