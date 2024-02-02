@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/night"
+    tools:context=".ui.cities.AddCityActivity">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/searchCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/locTv"
+        app:strokeColor="@color/black"
+        app:strokeWidth="2dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/addCityFragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/searchCard" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/locTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="20sp"
+        android:gravity="bottom"
+        android:text="Surat, Gujarat, India"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/searchCard"
+        app:layout_constraintBottom_toTopOf="@id/addCityBtn"
+        app:drawableLeftCompat="@drawable/baseline_fmd_good_24" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/addCityBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:backgroundTint="@color/nightBackground"
+        android:text="@string/add_city"
+        app:layout_constraintBottom_toTopOf="@id/cityListText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locTv" />
+
+    <TextView
+        android:id="@+id/cityListText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/nightBackground"
+        android:fontFamily="@font/montserrat_semibold"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/your_favorite_cities"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/cityListRV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addCityBtn" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cityListRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cityListText"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
