@@ -35,13 +35,11 @@
         <SwitchPreferenceCompat
             app:icon="@drawable/baseline_record_voice_over_24"
             app:key="textToSpeech"
-            app:summary="Daily at 08:00 AM"
             app:title="Forecast Announcement" />
 
         <SwitchPreferenceCompat
             app:icon="@drawable/ic_notifications_black_24dp"
             app:key="notification"
-            app:summary="Every 6 hours"
             app:title="Local Notification" />
 
     </PreferenceCategory>
