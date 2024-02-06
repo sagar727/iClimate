@@ -16,7 +16,7 @@ android {
         applicationId = "com.loopcreations.iclimate"
         minSdk = 28
         targetSdk = 34
-        versionCode = 8
+        versionCode = 9
         versionName = "1.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

@@ -30,7 +30,7 @@ class HourlyForecastAdapter(private val context: Context, private val hourlyFore
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val hourlyPosition = hourlyForecastList[position]
-        getClimateCondition(holder.conditionIV, hourlyPosition.code.toInt())
+        getClimateCondition(holder.conditionIV, hourlyPosition.code.toInt(), hourlyPosition.isDay)
         holder.temp.text = "${hourlyPosition.temp} \u00B0"
         holder.hour.text = hourlyPosition.date
     }
@@ -39,16 +39,16 @@ class HourlyForecastAdapter(private val context: Context, private val hourlyFore
         return hourlyForecastList.size
     }
 
-    private fun getClimateCondition(icon: ImageView, code: Int) {
+    private fun getClimateCondition(icon: ImageView, code: Int, isDay: Boolean) {
         when (code) {
             0 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.baseline_wb_sunny_24))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if(isDay) R.drawable.baseline_wb_sunny_24 else R.drawable.baseline_mode_night_24))
             }
             1 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.mainly_clear_day))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if(isDay) R.drawable.mainly_clear_day else R.drawable.mainly_clear_night))
             }
             2 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.partly_cloudy_day))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if(isDay) R.drawable.partly_cloudy_day else R.drawable.partly_cloudy_night))
             }
             3 -> {
                 icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.baseline_cloud_24))
@@ -57,13 +57,13 @@ class HourlyForecastAdapter(private val context: Context, private val hourlyFore
                 icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.baseline_foggy_24))
             }
             51 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.drizzle_light_day))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if(isDay) R.drawable.drizzle_light_day else R.drawable.drizzle_light_night))
             }
             53,55 -> {
                 icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.drizzle))
             }
             56 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.freezing_drizzle_day))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if (isDay) R.drawable.freezing_drizzle_day else R.drawable.freezing_drizzle_night))
             }
             57 -> {
                 icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.freezing_drizzle_icon))
@@ -93,10 +93,10 @@ class HourlyForecastAdapter(private val context: Context, private val hourlyFore
                 icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.snow_grains))
             }
             80 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.raining_day))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if (isDay) R.drawable.raining_day else R.drawable.raining_night))
             }
             81 -> {
-                icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.moderate_shower_day))
+                icon.setImageDrawable(AppCompatResources.getDrawable(context, if (isDay) R.drawable.moderate_shower_day else R.drawable.moderate_shower_night))
             }
             82 -> {
                 icon.setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.heavy_shower))

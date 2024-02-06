@@ -32,7 +32,6 @@ import com.loopcreations.iclimate.climateDataModel.ForecastModel
 import com.loopcreations.iclimate.climateDataModel.HourlyForecastModel
 import com.loopcreations.iclimate.databinding.FragmentClimateBinding
 import com.loopcreations.iclimate.network.NetworkManager
-import com.loopcreations.iclimate.network.RetrofitProvider
 import com.loopcreations.iclimate.repository.ClimateRepository
 import com.loopcreations.iclimate.room.CityEntity
 import com.google.android.gms.common.api.ResolvableApiException
@@ -50,7 +49,6 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback.DismissEvent
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class ClimateFragment : Fragment() {
 
@@ -397,65 +395,112 @@ class ClimateFragment : Fragment() {
 
                 var j = 0
                 hourlyForecastList.clear()
-                val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+                val currTime = climate.current.time
+                val currentHour = currTime.split("T")[1].split(":")[0].toInt()
                 while (j < 24) {
                     val hourlyCode = climate.hourly.hourlyWCode[j + currentHour]
                     val hourlyTemp = climate.hourly.hourlyTemp[j + currentHour]
                     val time = climate.hourly.time[j + currentHour].split("T")
                     val timeInNum = time[1].split(":")[0].toInt()
-                    if (timeInNum == 0) {
-                        val t = "12 AM"
-                        if (currentHour == timeInNum) {
-                            hourlyForecastList.add(
-                                HourlyForecastModel(
-                                    "Now",
-                                    hourlyCode,
-                                    hourlyTemp
+
+                    when(timeInNum) {
+                        1,2,3,4,5,6 -> {
+                            val t = "$timeInNum AM"
+                            if (currentHour == timeInNum) {
+                                hourlyForecastList.add(
+                                    HourlyForecastModel(
+                                        "Now",
+                                        hourlyCode,
+                                        hourlyTemp,
+                                        false
+                                    )
                                 )
-                            )
-                        } else {
-                            hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp))
+                            } else {
+                                hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp, false))
+                            }
                         }
-                    } else if (timeInNum == 12) {
-                        val t = "12 PM"
-                        if (currentHour == timeInNum) {
-                            hourlyForecastList.add(
-                                HourlyForecastModel(
-                                    "Now",
-                                    hourlyCode,
-                                    hourlyTemp
+
+                        7,8,9,10,11 -> {
+                            val t = "$timeInNum AM"
+                            if (currentHour == timeInNum) {
+                                hourlyForecastList.add(
+                                    HourlyForecastModel(
+                                        "Now",
+                                        hourlyCode,
+                                        hourlyTemp,
+                                        true
+                                    )
                                 )
-                            )
-                        } else {
-                            hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp))
+                            } else {
+                                hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp, true))
+                            }
                         }
-                    } else if (timeInNum > 12) {
-                        val t = "${timeInNum - 12} PM"
-                        if (currentHour == timeInNum) {
-                            hourlyForecastList.add(
-                                HourlyForecastModel(
-                                    "Now",
-                                    hourlyCode,
-                                    hourlyTemp
+
+                        12 -> {
+                            val t = "$timeInNum PM"
+                            if (currentHour == timeInNum) {
+                                hourlyForecastList.add(
+                                    HourlyForecastModel(
+                                        "Now",
+                                        hourlyCode,
+                                        hourlyTemp,
+                                        true
+                                    )
                                 )
-                            )
-                        } else {
-                            hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp))
+                            } else {
+                                hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp, true))
+                            }
                         }
-                    } else {
-                        val t = "$timeInNum AM"
-                        if (currentHour == timeInNum) {
-                            hourlyForecastList.add(
-                                HourlyForecastModel(
-                                    "Now",
-                                    hourlyCode,
-                                    hourlyTemp
+
+                        13,14,15,16,17,18,19 -> {
+                            val t = "${timeInNum - 12} PM"
+                            if (currentHour == timeInNum) {
+                                hourlyForecastList.add(
+                                    HourlyForecastModel(
+                                        "Now",
+                                        hourlyCode,
+                                        hourlyTemp,
+                                        true
+                                    )
                                 )
-                            )
-                        } else {
-                            hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp))
+                            } else {
+                                hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp, true))
+                            }
+                        }
+
+                        20,21,22,23 -> {
+                            val t = "${timeInNum -12} PM"
+                            if (currentHour == timeInNum) {
+                                hourlyForecastList.add(
+                                    HourlyForecastModel(
+                                        "Now",
+                                        hourlyCode,
+                                        hourlyTemp,
+                                        false
+                                    )
+                                )
+                            } else {
+                                hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp, false))
+                            }
+                        }
+
+                        else -> {
+                            val t = "12 AM"
+                            if (currentHour == timeInNum) {
+                                hourlyForecastList.add(
+                                    HourlyForecastModel(
+                                        "Now",
+                                        hourlyCode,
+                                        hourlyTemp,
+                                        false
+                                    )
+                                )
+                            } else {
+                                hourlyForecastList.add(HourlyForecastModel(t, hourlyCode, hourlyTemp, false))
+                            }
                         }
                     }
+
                     hourlyForecastAdapter.notifyDataSetChanged()
                     j++
                 }
@@ -497,7 +542,7 @@ class ClimateFragment : Fragment() {
     }
 
     private fun getClimateCondition(code: Int, isDay: Boolean): String {
-        var climateCondition = ""
+        val climateCondition: String
 
         when (code) {
             0 -> {
