@@ -6,6 +6,7 @@ import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +19,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -65,13 +67,53 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         forecastSpeechSwitch = findPreference("textToSpeech")!!
         forecastSpeechSwitch.setOnPreferenceChangeListener { _, newValue ->
-            var res = true
-            if (newValue == true) {
-                res = forecastServices()
+            var result = true
+//            var res = true
+//            if (newValue == true) {
+//                res = forecastServices()
+//            } else {
+//                workManager.cancelAllWorkByTag("Announcement")
+//            }
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (!isNotificationEnabled()) {
+                    result = requestNotification()
+                    if (newValue == true) {
+                        createAnnouncementChannel()
+                        val res = forecastServices()
+                        if(res){
+                            Toast.makeText(requireContext(),"scheduled",Toast.LENGTH_LONG).show()
+                        }
+                    } else {
+                        workManager.cancelAllWorkByTag("Announcement")
+                    }
+                } else {
+                    if (newValue == true) {
+                        createAnnouncementChannel()
+                        val res = forecastServices()
+                        if(res){
+                            Toast.makeText(requireContext(),"scheduled",Toast.LENGTH_LONG).show()
+                        }
+                    } else {
+                        workManager.cancelAllWorkByTag("Announcement")
+                    }
+                }
+                result
             } else {
-                workManager.cancelAllWorkByTag("Announcement")
+                if (newValue == true) {
+                    createAnnouncementChannel()
+                    val res = forecastServices()
+                    if(res){
+                        Toast.makeText(requireContext(),"scheduled",Toast.LENGTH_LONG).show()
+                    }
+                } else {
+                    workManager.cancelAllWorkByTag("Announcement")
+                }
+                true
             }
-            res
+
+
+//            res
         }
 
         val notificationSwitch = findPreference<SwitchPreferenceCompat>("notification")
@@ -88,6 +130,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     }
                 } else {
                     if (newValue == true) {
+                        createNotificationChannel()
                         scheduleNotification()
                     } else {
                         workManager.cancelAllWorkByTag("Notifications")
@@ -96,6 +139,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 result
             } else {
                 if (newValue == true) {
+                    createNotificationChannel()
                     scheduleNotification()
                 } else {
                     workManager.cancelAllWorkByTag("Notifications")
@@ -147,6 +191,18 @@ class SettingsFragment : PreferenceFragmentCompat() {
         channel.description = "Notification Settings For Forecast"
 
         val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun createAnnouncementChannel() {
+        val channel = NotificationChannel(
+            "ttsChannel",
+            "TTS Notification",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        channel.description = "Notification for TTS service"
+
+        val notificationManager = requireContext().getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(channel)
     }
 

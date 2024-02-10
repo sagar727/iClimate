@@ -136,7 +136,7 @@ class ClimateRepository(context: Context) : IClimate {
                 val currTemp = data?.current?.currentTemp
                 val maxTemp = data?.daily?.dailyTempMax?.get(0)
                 val minTemp = data?.daily?.dailyTempMin?.get(0)
-                val climateCondition: String = when(data?.daily?.dailyWCode?.get(0)){
+                val climateCondition: String = when(data?.current?.currentWCode){
                     0 ->{
                         "Clear Sky"
                     }

@@ -38,7 +38,7 @@ class MyTtsService : Service(){
         val notificationIntent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
-        createNotificationChannel()
+//        createNotificationChannel()
 
         // Build the notification
         val notification: Notification = NotificationCompat.Builder(this, "ttsChannel")
