@@ -7,19 +7,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.preference.PreferenceManager
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.loopcreations.iclimate.network.MyTtsService
 import com.loopcreations.iclimate.network.NetworkManager
 import com.loopcreations.iclimate.repository.ClimateRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 class AnnouncementReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-//        scheduleAnnouncement(context)
         scheduleNext(context)
         performApiCall(context)
     }
@@ -82,17 +78,5 @@ class AnnouncementReceiver : BroadcastReceiver() {
             nextAlarmTime,
             pendingIntent
         )
-    }
-
-    private fun scheduleAnnouncement(context: Context) {
-        val workManager = WorkManager.getInstance(context)
-        val workRequest = PeriodicWorkRequestBuilder<AnnouncementWorker>(
-            repeatInterval = 1,
-            repeatIntervalTimeUnit = TimeUnit.DAYS
-        )
-            .addTag("Announcement")
-            .build()
-
-        workManager.enqueue(workRequest)
     }
 }

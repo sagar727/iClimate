@@ -68,12 +68,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         forecastSpeechSwitch = findPreference("textToSpeech")!!
         forecastSpeechSwitch.setOnPreferenceChangeListener { _, newValue ->
             var result = true
-//            var res = true
-//            if (newValue == true) {
-//                res = forecastServices()
-//            } else {
-//                workManager.cancelAllWorkByTag("Announcement")
-//            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 if (!isNotificationEnabled()) {
@@ -85,7 +79,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                             Toast.makeText(requireContext(),"scheduled",Toast.LENGTH_LONG).show()
                         }
                     } else {
-                        workManager.cancelAllWorkByTag("Announcement")
+                        cancelAnnouncement()
                     }
                 } else {
                     if (newValue == true) {
@@ -95,7 +89,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                             Toast.makeText(requireContext(),"scheduled",Toast.LENGTH_LONG).show()
                         }
                     } else {
-                        workManager.cancelAllWorkByTag("Announcement")
+                        cancelAnnouncement()
                     }
                 }
                 result
@@ -107,13 +101,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
                         Toast.makeText(requireContext(),"scheduled",Toast.LENGTH_LONG).show()
                     }
                 } else {
-                    workManager.cancelAllWorkByTag("Announcement")
+                    cancelAnnouncement()
                 }
                 true
             }
-
-
-//            res
         }
 
         val notificationSwitch = findPreference<SwitchPreferenceCompat>("notification")
@@ -147,6 +138,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
         }
+    }
+
+    private fun cancelAnnouncement() {
+        val cancelIntent = Intent(activity, AnnouncementReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            activity, 100, cancelIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val manager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        manager.cancel(pendingIntent)
     }
 
     @SuppressLint("ScheduleExactAlarm")
