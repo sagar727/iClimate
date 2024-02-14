@@ -40,7 +40,8 @@ class NotificationWorker(val context: Context, params: WorkerParameters) : Worke
                         defaultCityData.lng,
                         temp,
                         wind,
-                        precipitation
+                        precipitation,
+                        false
                     )
 
                     val condition = climateData[3]

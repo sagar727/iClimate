@@ -39,7 +39,8 @@ class AnnouncementReceiver : BroadcastReceiver() {
                         defaultCityData.lng,
                         temp,
                         wind,
-                        precipitation
+                        precipitation,
+                        true
                     )
 
                     val currentTemp = climateData[0] + if (tempUnit) "Fahrenheit" else "Celsius"

@@ -98,6 +98,7 @@ class ClimateRepository(context: Context) : IClimate {
         temp: String,
         wind: String,
         prep: String,
+        isForAnnouncement: Boolean
     ): ArrayList<String> {
         val currentParams: Array<String> = arrayOf(
             "temperature_2m",
@@ -136,7 +137,7 @@ class ClimateRepository(context: Context) : IClimate {
                 val currTemp = data?.current?.currentTemp
                 val maxTemp = data?.daily?.dailyTempMax?.get(0)
                 val minTemp = data?.daily?.dailyTempMin?.get(0)
-                val climateCondition: String = when(data?.current?.currentWCode){
+                val climateCondition: String = when(if(isForAnnouncement) data?.daily?.dailyWCode?.get(0) else data?.current?.currentWCode){
                     0 ->{
                         "Clear Sky"
                     }
